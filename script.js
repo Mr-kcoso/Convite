@@ -2,8 +2,8 @@ let step = 0;
 
 const texts = [
   {
-    title: "Toda jornada começa com pessoas",
-    text: "E toda história precisa de alguém que acredite nela."
+    title: "Toda jornada precisa de alguém que acredita",
+    text: "E nenhum ciclo importante se constrói sozinho."
   },
   {
     title: "Este ano ganhou um novo significado para todos nós.",
@@ -20,31 +20,38 @@ const texts = [
 ];
 
 function next() {
+
+  // Inicia música e animação no primeiro clique
+  if (step === 0) {
+    const musica = document.getElementById("musica");
+    musica.volume = 0;
+    musica.play();
+
+    // Fade in suave
+    let vol = 0;
+    const fade = setInterval(() => {
+      if (vol < 1) {
+        vol += 0.05;
+        musica.volume = vol;
+      } else {
+        clearInterval(fade);
+      }
+    }, 200);
+
+    document.body.classList.add("animando");
+  }
+
   step++;
 
   if (step < texts.length) {
-    const h1 = document.querySelector("h1");
-    const p = document.querySelector("p");
-
-    h1.classList.remove("fade");
-    p.classList.remove("fade");
-    void h1.offsetWidth;
-
-    h1.innerText = texts[step].title;
-    p.innerText = texts[step].text;
-
-    h1.classList.add("fade");
-    p.classList.add("fade");
+    document.querySelector("h1").innerText = texts[step].title;
+    document.querySelector("p").innerText = texts[step].text;
   } else {
     document.querySelector(".container").innerHTML = `
-      <h1 class="fade">💛 Obrigado, Jeniffer</h1>
-      <p class="fade">Sua presença já faz parte da nossa história.</p>
-      <p class="fade">Que irá durar exatos:</p>
-      <div id="contador" class="fade"></div>
-
-      <button onclick="aceitou()" style="margin-top:20px">
-        Aceito 💛
-      </button>
+      <h1>💛 É oficial!</h1>
+      <p>A professora Jeniffer agora faz parte da nossa formatura.</p>
+      <p>Esse momento vai durar exatamente:</p>
+      <div id="contador"></div>
     `;
     iniciarContador();
   }
@@ -72,16 +79,4 @@ function iniciarContador() {
 
   atualizar();
   setInterval(atualizar, 60000);
-}
-
-function aceitou() {
-  document.querySelector(".container").innerHTML = `
-    <h1 class="fade">🎓 É oficial!</h1>
-    <p class="fade">
-      A professora Jeniffer agora faz parte da nossa formatura 💛
-    </p>
-    <p class="fade">
-      3º ano • Desenvolvimento de Sistemas • 2026
-    </p>
-  `;
 }
